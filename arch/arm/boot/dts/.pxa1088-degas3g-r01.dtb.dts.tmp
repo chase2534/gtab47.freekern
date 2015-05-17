@@ -1,0 +1,2129 @@
+# 1 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts"
+# 17 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts"
+/dts-v1/;
+# 1 "/mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h" 1
+# 19 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+# 1 "/mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/gpio/gpio.h" 1
+# 20 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+# 1 "/mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/mmc/pxa_sdhci.h" 1
+# 21 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+# 1 "/mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/linux/sizes.h" 1
+# 22 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+# 1 "/mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/video/mmp_disp.h" 1
+# 23 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+
+# 1 "arch/arm/boot/dts/sec-machtypes.h" 1
+# 25 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+# 1 "arch/arm/boot/dts/sec-pxa1x88-pinfunc.h" 1
+# 26 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+# 1 "arch/arm/boot/dts/pxa1088.dtsi" 1
+# 10 "arch/arm/boot/dts/pxa1088.dtsi"
+/include/ "skeleton.dtsi"
+# 1 "arch/arm/boot/dts/pxa988-pm.h" 1
+# 12 "arch/arm/boot/dts/pxa1088.dtsi" 2
+# 1 "arch/arm/boot/dts/pxa988-pinfunc.h" 1
+# 13 "arch/arm/boot/dts/pxa1088.dtsi" 2
+# 1 "/mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/usb/mv_usb_phy.h" 1
+# 14 "arch/arm/boot/dts/pxa1088.dtsi" 2
+
+/ {
+ interrupt-parent = <&gic>;
+
+ aliases {
+  serial0 = &uart1;
+  serial1 = &uart2;
+  serial2 = &uart3;
+  i2c0 = &twsi0;
+  i2c1 = &twsi1;
+  i2c2 = &twsi2;
+  mmp-camera0 = &ccic1;
+  area51-ccic0 = &mc_ccic0;
+ };
+
+ cpus {
+  cpu@0 {
+   compatible = "arm,cortex-a7";
+  };
+  cpu@1 {
+   compatible = "arm,cortex-a7";
+  };
+  cpu@2 {
+   compatible = "arm,cortex-a7";
+  };
+  cpu@3 {
+   compatible = "arm,cortex-a7";
+  };
+ };
+
+ gic: interrupt-controller@d1dfa000 {
+  compatible = "arm,cortex-a7-gic";
+  interrupt-controller;
+  #interrupt-cells = <3>;
+  reg = <0xd1df9000 0x1000>,
+        <0xd1dfa000 0x2000>;
+ };
+
+ timer {
+  compatible = "arm,armv7-timer";
+
+  interrupts = <1 13 0x308>,
+        <1 14 0x308>,
+        <1 11 0x308>,
+        <1 10 0x308>;
+  clock-frequency = <0>;
+ };
+
+ pmu {
+  compatible = "arm,cortex-a7-pmu";
+  interrupts = <0 58 0x04
+         0 61 0x04
+         0 66 0x04
+         0 68 0x04>;
+ };
+ clock: clock-controller {
+  compatible = "marvell,pxa988-clock";
+  reg = <0xc0100000 0x488>;
+  reg-names = "dmcu";
+  peri_clock {
+   compatible = "marvell,mmp-peri-clock";
+   ccic_func_clk {
+    lpm-qos = <2>;
+   };
+
+   ccic2_func_clk {
+    lpm-qos = <2>;
+   };
+  };
+ };
+ soc {
+  #address-cells = <1>;
+  #size-cells = <1>;
+  compatible = "simple-bus";
+  interrupt-parent = <&gic>;
+  ranges;
+
+  ddr@c0100000 {
+   compatible = "marvell,devfreq-ddr";
+   reg = <0xc0100000 0x488>;
+   marvell,qos;
+   status = "disabled";
+  };
+
+  axi@d4200000 {
+   compatible = "mrvl,axi-bus", "simple-bus";
+   #address-cells = <1>;
+   #size-cells = <1>;
+   reg = <0xd4200000 0x00200000>;
+   ranges;
+
+   coda7542: coda7542@d420d000 {
+    compatible = "mrvl,mmp-coda7542";
+    reg = <0xd420d000 0x1000>,
+          <0xd1004000 0x11600>;
+    interrupts = <0 25 0x4>;
+    status = "disabled";
+   };
+
+   intc: wakeupgen@d4282000 {
+    compatible = "mrvl,mmp-intc-wakeupgen";
+    reg = <0xd4282000 0x1000>,
+          <0xd4282800 0x12c>;
+    mrvl,intc-nr-irqs = <76>;
+    mrvl,intc-gbl-mask = <0x228 0x3
+           0x238 0x3
+           0x248 0x3
+           0x258 0x3>;
+    mrvl,intc-for-cp = <0 31 32>;
+    mrvl,intc-wake-clr = <9 (1 << 3)
+            39 (1 << 0 | 1 << 1 | 1 << 6)>;
+   };
+
+   usbphy: usbphy@d4207000 {
+    compatible = "marvell,usb2-phy-40lp";
+    reg = <0xd4207000 0x200>;
+    marvell,udc-name = "mv-udc";
+    marvell,ehci-name = "pxa-u2oehci";
+    marvell,otg-name = "mv-otg";
+    status = "disabled";
+   };
+
+   udc: udc@d4208100 {
+    compatible = "marvell,mv-udc";
+    reg = <0xd4208100 0x200>;
+    interrupts = <0 44 0x4>;
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   ehci: ehci@d4208100 {
+    compatible = "marvell,pxa-u2oehci";
+    reg = <0xd4208100 0x200>;
+    interrupts = <0 44 0x4>;
+    status = "disabled";
+   };
+
+   otg: otg@d4208100 {
+    compatible = "marvell,mv-otg";
+    reg = <0xd4208100 0x200>;
+    interrupts = <0 44 0x4>;
+    marvell,udc-name = "mv-udc";
+    marvell,ehci-name = "pxa-u2oehci";
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   dsi: dsi@d420b800 {
+    compatible = "marvell,mmp-dsi";
+    reg = <0xd420b800 0x1ec>;
+    interrupts = <0 53 0x4>;
+    status = "disabled";
+   };
+
+   disp: disp@d420b000 {
+    compatible = "marvell,mmp-disp";
+    reg = <0xd420b000 0x1fc>;
+    lpm-qos = <3>;
+    interrupts = <0 41 0x4>;
+    status = "disabled";
+   };
+
+   fb0: fbbase {
+    compatible = "marvell,mmp-fb";
+    status = "disabled";
+   };
+
+   fb1: fboverlay@0 {
+    compatible = "marvell,mmp-fb-overlay";
+    status = "disabled";
+    reg = <0x0 0x0>;
+   };
+
+   fb2: fboverlay@1{
+    compatible = "marvell,mmp-fb-overlay";
+    status = "disabled";
+    reg = <0x1 0x0>;
+   };
+
+   fb3: fboverlay@2 {
+    compatible = "marvell,mmp-fb-overlay";
+    status = "disabled";
+    reg = <0x2 0x0>;
+   };
+
+   sdh3: sdh@d4281000 {
+    compatible = "mrvl,pxav3-mmc";
+    reg = <0xd4281000 0x120>;
+    interrupts = <0 39 0x4>;
+    lpm-qos = <2>;
+    status = "disabled";
+    };
+
+   sdh1: sdh@d4280000 {
+    compatible = "mrvl,pxav3-mmc";
+    reg = <0xd4280000 0x120>;
+    interrupts = <0 39 0x4>;
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   sdh2: sdh@d4280800 {
+    compatible = "mrvl,pxav3-mmc";
+    reg = <0xd4280800 0x120>;
+    interrupts = <0 39 0x4>;
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   ccic1: ccic@d420a000 {
+       compatible = "marvell,mmp-ccic";
+       reg = <0xd420a000 0x2ff>, <0xd4282800 0x1ff>;
+       reg-names = "ccic-regs", "apmu-regs";
+       dma-burst = <64>;
+       mclk-src = <3>;
+       mclk-div = <13>;
+       interrupts = <0 42 0x4>;
+       status = "disable";
+   };
+
+   vpu-devfreq {
+    compatible = "marvell,devfreq-vpu";
+    status = "disabled";
+   };
+
+   geu: geu {
+    compatible = "marvell,mmp-geu";
+    reg = <0xD4201000 0x1000>;
+    interrupts = <0 40 0x4>;
+    dmas = <&pdma0 68 1
+     &pdma0 69 1>;
+    dma-names = "rx", "tx";
+    status = "disabled";
+    lpm-qos = <2>;
+   };
+
+   mc_ccic0: mc_ccic@d420a000 {
+     compatible = "marvell, AREA51-CCIC";
+     fclk-mhz = <416>;
+     mclk-mhz = <24>;
+     interrupts = <0 42 0x4>;
+     status = "disabled";
+   };
+
+   area51_isp: area51_isp@0xD420F000 {
+    compatible = "marvell, AREA51-ISP";
+    reg = <0xD420F000 0xFFFF>;
+    reg-name = "area51-regs";
+    interrupts = <0 15 0x4>;
+    status = "disabled";
+   };
+
+   area51_ipc: area51_ipc@0xD4240000 {
+    compatible = "marvell, uio-area51";
+    reg = <0xD4240000 0x3FFFF>;
+    status = "disabled";
+   };
+
+   apmu: pmu@d4282800 {
+    compatible = "mrvl,mmp-pmu-apmu";
+    reg = <0xd4282800 0x1b0>;
+   };
+  };
+
+  apb@d4000000 {
+   compatible = "mrvl,apb-bus", "simple-bus";
+   #address-cells = <1>;
+   #size-cells = <1>;
+   reg = <0xd4000000 0x00200000>;
+   ranges;
+
+   pdma0: pdma@d4000000 {
+    compatible = "marvell,pdma-1.0";
+    reg = <0xd4000000 0x10000>;
+    interrupts = <0 47 0x4>;
+    #dma-cells= <2>;
+    #dma-channels = <32>;
+    #dma-channels-tz = <30>;
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   timer0: timer@d4014000 {
+    compatible = "marvell,mmp-timer";
+    reg = <0xd4014000 0xc8>;
+    marvell,timer-id = <0>;
+    marvell,timer-flag = <0>;
+    marvell,timer-fc_freq = <3250000>;
+    marvell,timer-apb_freq = <26000000>;
+
+    counter0 {
+     interrupts = <0 13 0x4>;
+     marvell,timer-counter-id = <0>;
+     marvell,timer-counter-cpu = <0>;
+     marvell,timer-counter-cnt_freq = <32768>;
+     marvell,timer-counter-usage = <4>;
+     marvell,timer-counter-cnt_rating = <200>;
+     marvell,timer-counter-mode = <1>;
+    };
+
+    counter1 {
+     interrupts = <0 14 0x4>;
+     marvell,timer-counter-id = <1>;
+     marvell,timer-counter-cpu = <1>;
+     marvell,timer-counter-cnt_freq = <32768>;
+     marvell,timer-counter-usage = <4>;
+     marvell,timer-counter-cnt_rating = <200>;
+     marvell,timer-counter-mode = <1>;
+    };
+
+    counter2 {
+     interrupts = <0 14 0x4>;
+     marvell,timer-counter-id = <2>;
+     marvell,timer-counter-cpu = <0>;
+     marvell,timer-counter-cnt_freq = <32768>;
+     marvell,timer-counter-usage = <1>;
+     marvell,timer-counter-cnt_rating = <200>;
+     marvell,timer-counter-mode = <0>;
+    };
+   };
+
+   timer1: timer@d4016000 {
+    compatible = "marvell,mmp-timer";
+    reg = <0xd4016000 0xc8>;
+    marvell,timer-id = <1>;
+    marvell,timer-flag = <0>;
+    marvell,timer-fc_freq = <3250000>;
+    marvell,timer-apb_freq = <26000000>;
+
+    counter0 {
+     interrupts = <0 29 0x4>;
+     marvell,timer-counter-id = <0>;
+     marvell,timer-counter-cpu = <2>;
+     marvell,timer-counter-cnt_freq = <32768>;
+     marvell,timer-counter-usage = <4>;
+     marvell,timer-counter-cnt_rating = <200>;
+     marvell,timer-counter-mode = <1>;
+    };
+
+    counter1 {
+     interrupts = <0 30 0x4>;
+     marvell,timer-counter-id = <1>;
+     marvell,timer-counter-cpu = <3>;
+     marvell,timer-counter-cnt_freq = <32768>;
+     marvell,timer-counter-usage = <4>;
+     marvell,timer-counter-cnt_rating = <200>;
+     marvell,timer-counter-mode = <1>;
+    };
+
+    counter2 {
+     interrupts = <0 30 0x4>;
+     marvell,timer-counter-id = <2>;
+     marvell,timer-counter-cpu = <0>;
+     marvell,timer-counter-cnt_freq = <3250000>;
+     marvell,timer-counter-usage = <8>;
+     marvell,timer-counter-cnt_rating = <200>;
+     marvell,timer-counter-mode = <0>;
+    };
+   };
+
+   uart1: uart@d4036000 {
+    compatible = "mrvl,mmp-uart";
+    reg = <0xd4036000 0x1000>;
+    interrupts = <0 59 0x4>;
+    dmas = <&pdma0 4 1
+     &pdma0 5 1>;
+    dma-names = "rx", "tx";
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   uart2: uart@d4017000 {
+    compatible = "mrvl,mmp-uart";
+    reg = <0xd4017000 0x1000>;
+    interrupts = <0 27 0x4>;
+    dmas = <&pdma0 21 1
+     &pdma0 22 1>;
+    dma-names = "rx", "tx";
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   uart3: uart@d4018000 {
+    compatible = "mrvl,mmp-uart";
+    reg = <0xd4018000 0x1000>;
+    interrupts = <0 28 0x4>;
+    dmas = <&pdma0 23 1
+     &pdma0 24 1>;
+    dma-names = "rx", "tx";
+    lpm-qos = <2>;
+    status = "disabled";
+   };
+
+   gpio: gpio@d4019000 {
+    compatible = "marvell,mmp-gpio";
+    #address-cells = <1>;
+    #size-cells = <1>;
+    reg = <0xd4019000 0x800>;
+    gpio-controller;
+    #gpio-cells = <2>;
+    interrupts = <0 49 0x4>;
+    interrupt-names = "gpio_mux";
+    interrupt-controller;
+    #interrupt-cells = <2>;
+    ranges;
+
+    gcb0: gpio@d4019000 {
+     reg = <0xd4019000 0x4>;
+    };
+
+    gcb1: gpio@d4019004 {
+     reg = <0xd4019004 0x4>;
+    };
+
+    gcb2: gpio@d4019008 {
+     reg = <0xd4019008 0x4>;
+    };
+
+    gcb3: gpio@d4019100 {
+     reg = <0xd4019100 0x4>;
+    };
+   };
+
+   mfpr: mfpr@d401e000 {
+    compatible = "marvell,mmp-mfp-leftover";
+    status = "disable";
+   };
+
+   edgewakeup: edgewakeup@d4019800 {
+    compatible = "mrvl,mmp-edge-wakeup";
+    reg = <0xd4019800 0x10>;
+    status = "disabled";
+   };
+
+   twsi0: i2c@d4011000 {
+    compatible = "mrvl,mmp-twsi";
+    #address-cells = <1>;
+    #size-cells = <0>;
+    reg = <0xd4011000 0x60>;
+    interrupts = <0 7 0x4>;
+    lpm-qos = <3>;
+    mrvl,i2c-fast-mode;
+
+
+
+
+
+    marvell,i2c-ilcr = <0x82c469f>;
+    marvell,i2c-iwcr = <0x142a>;
+    status = "disabled";
+   };
+
+   twsi1: i2c@d4010800 {
+    compatible = "mrvl,mmp-twsi";
+    #address-cells = <1>;
+    #size-cells = <0>;
+    reg = <0xd4010800 0x60>;
+    interrupts = <0 33 0x4>;
+    lpm-qos = <3>;
+
+    mrvl,i2c-fast-mode;
+    marvell,i2c-ilcr = <0x82c469f>;
+    marvell,i2c-iwcr = <0x142a>;
+
+    status = "disabled";
+   };
+
+   twsi2: i2c@d4037000 {
+    compatible = "mrvl,mmp-twsi";
+    #address-cells = <1>;
+    #size-cells = <0>;
+
+    reg = <0xd4037000 0x60>,
+          <0xd403d300 0x4>;
+    interrupts = <0 54 0x4>;
+    lpm-qos = <3>;
+
+    mrvl,i2c-fast-mode;
+    marvell,i2c-ilcr = <0x82c469f>;
+    marvell,i2c-iwcr = <0x142a>;
+
+    marvell,i2c-always-on;
+    status = "disabled";
+   };
+
+   watchdog: watchdog@d4080000 {
+    compatible = "marvell,pxa-wdt";
+    reg = <0xd4080000 0xff>,
+          <0xd4050000 0x1024>;
+    status = "disabled";
+   };
+
+   rtc: rtc@d4010000 {
+    compatible = "mrvl,mmp-rtc";
+    reg = <0xd4010000 0x100>;
+    interrupts = <0 5 0x4>,<0 6 0x4>;
+    interrupt-names = "rtc 1Hz", "rtc alarm";
+    status = "disabled";
+   };
+
+   keypad: keypad@d4012000 {
+    compatible = "marvell,pxa27x-keypad";
+    reg = <0xd4012000 0x4c>;
+    lpm-qos = <3>;
+    interrupts = <0 9 0x4>;
+    marvell,keypad-lpm-mod;
+    status = "disabled";
+   };
+
+   ssp0: ssp@d401b000 {
+    compatible = "mrvl,pxa910-ssp";
+    reg = <0xd401b000 0x90>;
+    ssp-id = <1>;
+    interrupts = <0 3 0x4>;
+   };
+
+   ssp1: ssp@d42a0c00 {
+    compatible = "mrvl,pxa910-ssp";
+    reg = <0xd42a0c00 0x90>;
+    ssp-id = <2>;
+    interrupts = <0 2 0x4>;
+   };
+
+   ssp4: ssp@d4039000 {
+    compatible = "mrvl,pxa910-ssp";
+    reg = <0xd4039000 0x90>;
+    ssp-id = <5>;
+    interrupts = <0 34 0x4>;
+   };
+
+   pmx: pinmux@d401e000 {
+    compatible = "pinconf-single";
+    reg = <0xd401e000 0x330>;
+    #address-cells = <1>;
+    #size-cells = <1>;
+    #gpio-range-cells = <3>;
+    ranges;
+
+    pinctrl-single,register-width = <32>;
+    pinctrl-single,function-mask = <7>;
+
+    range: gpio-range {
+     #pinctrl-single,gpio-range-cells = <3>;
+    };
+   };
+
+   acipc: acipc@d401d000 {
+    compatible = "mrvl,mmp-acipc";
+    reg = <0xd401d000 0x100>;
+    interrupts = <0 16 0x4>,<0 17 0x4>,<0 18 0x4>;
+    interrupt-names = "IPC_AP_DATAACK", "IPC_AP_SET_CMD", "IPC_AP_SET_MSG";
+    status = "disabled";
+
+   };
+
+   mpmu: pmu@d4050000 {
+    compatible = "mrvl,mmp-pmu-mpmu";
+    reg = <0xd4050000 0x1050>;
+   };
+  };
+
+  sram: sram@0xd1004000 {
+   compatible = "mmio-sram";
+   reg = <0xd1004000 0xaa00>;
+  };
+
+  soc-camera@0 {
+   compatible = "soc-camera-pdrv";
+   status = "disabled";
+   reg = <0x0 0x0>;
+  };
+
+  soc-camera@1 {
+   compatible = "soc-camera-pdrv";
+   status = "disabled";
+   reg = <0x1 0x0>;
+  };
+
+  soc-isp {
+   compatible = "soc-isp";
+   interrupts = <0 11 0x4>;
+   lpm-qos = <2>;
+   status = "disabled";
+  };
+
+  ramoops {
+   compatible = "ramoops";
+   status = "disabled";
+  };
+ };
+
+ ion {
+  compatible = "pxa-ion";
+  status = "disabled";
+ };
+
+ sd8x-rfkill {
+  compatible = "mrvl,sd8x-rfkill";
+  status = "disabled";
+ };
+
+ tzdd {
+  compatible = "pxa-tzdd";
+  status = "disabled";
+  lpm-qos = <2>;
+ };
+};
+# 27 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts" 2
+
+/ {
+ model = "Samsung Degas3g board based on PXA1088";
+ compatible = "mrvl,pxa1088-sec", "mrvl,pxa1088";
+ pxa,rev-id = <3909 1>;
+
+ aliases {
+  i2c7 = &muici2c;
+  i2c8 = &chargeri2c;
+  i2c5 = &sensori2c;
+  i2c6 = &camerai2c;
+ };
+
+ memory {
+
+
+
+
+
+
+  reg = <0x00000000 0x20000000 0x20000000 0x20000000>;
+ };
+
+ reserved_memory {
+
+  obm {
+   compatible = "marvell,obm-heap";
+   obm-base-default = <0x00000000>;
+   obm-base-with-tz = <0x01000000>;
+   obm-base-with-crash-dump = <0x06000000>;
+   obm-size = <(0x00100000)>;
+   status = "okay";
+  };
+
+  cp {
+   compatible = "marvell,cp-heap";
+   cp-base = <0x06000000>;
+   cp-size = <(32 * 0x00100000)>;
+   status = "okay";
+  };
+
+
+  ramoops {
+   compatible = "marvell,ramoops-heap";
+   ramoops-base = <0x08100000>;
+   ramoops-size = <(256 * 0x00000400)>;
+   status = "okay";
+  };
+
+  gpu {
+   compatible = "marvell,gpu-heap";
+   gpu-size = <(64 * 0x00100000)>;
+   status = "okay";
+  };
+
+  ion {
+   compatible = "marvell,ion-heap";
+   ion-base = <0x09000000>;
+   ion-size = <(112 * 0x00100000)>;
+   status = "okay";
+  };
+
+  cma {
+   compatible = "linux,cma-heap";
+   size = <0>;
+   status = "okay";
+  };
+ };
+
+ gpio-keys {
+  compatible = "gpio-keys";
+  pinctrl-names = "default", "sleep";
+  pinctrl-0 = <&gpio_keys_func>;
+  pinctrl-1 = <&gpio_keys_sleep>;
+  edge-wakeup-gpio = <13>;
+  status = "okay";
+  volume-up {
+   label = "Volume_up";
+   gpios = <&gpio 1 1>;
+   linux,code = <115>;
+   debounce-interval = <30>;
+  };
+  volume-down {
+   label = "Volume_down";
+   gpios = <&gpio 2 1>;
+   linux,code = <114>;
+   debounce-interval = <30>;
+  };
+  home-key {
+   label = "Home_key";
+   gpios = <&gpio 13 1>;
+   linux,code = <102>;
+   debounce-interval = <30>;
+   gpio-key,wakeup;
+  };
+ };
+
+ soc {
+  ddr@c0100000 {
+   status = "okay";
+  };
+
+  axi@d4200000 {
+   coda7542: coda7542@d420d000 {
+    marvell,sram-internal = <1>;
+    marvell,nv21_support = <0>;
+    status = "okay";
+   };
+   ccic1: ccic@d420a000 {
+    cam_avdd-supply = <&ldo4>;
+    cam_io-supply = <&ldo9>;
+    cam_core-supply = <&buck5>;
+    cam_stby = <&gpio 14 0>;
+    cam_rst = <&gpio 15 0>;
+    vt_cam_stby = <&gpio 82 0>;
+    vt_cam_rst = <&gpio 81 0>;
+    pinctrl-names = "default","enable";
+    pinctrl-0 = <&cam_pmx_gpio &cam_pmx_func2 &cam_pmx_func3 &cam_pmx_func4 &cam_pmx_func5>;
+    pinctrl-1 = <&cam_pmx_func1 &cam_pmx_func2 &cam_pmx_func3 &cam_pmx_func4 &cam_pmx_func5>;
+             mclk-gpio = <&gpio 77 0>;
+    status = "okay";
+   };
+
+   usbphy: usbphy@d4207000 {
+    status = "okay";
+   };
+
+   udc: udc@d4208100 {
+    status = "okay";
+   };
+
+   dsi: dsi@d420b800 {
+    marvell,phy-name = "mmp_dsi1";
+    marvell,plat-path-name = "mmp_pnpath";
+    marvell,dsi-lanes = <4>;
+    marvell,burst-mode = <2>;
+    marvell,hbp-en;
+    marvell,hfp-en;
+    status = "okay";
+   };
+
+   disp: disp@d420b000 {
+    marvell,disp-name = "disp_name";
+    marvell,path-num = <1>;
+    lpm-qos-d1p = <2>;
+    status = "okay";
+    path1 {
+     marvell,path-name = "mmp_pnpath";
+     marvell,overlay-num = <1>;
+     marvell,overlay-table = <1>;
+     marvell,output-type = <1>;
+     marvell,path-config = <0x10>;
+     marvell,link-config = <0x1>;
+     WVGA {
+      disp1_clksrc = "pll1_416m";
+      dsipll_clksrc = "pll3";
+      pn_sclk_clksrc = "disp1";
+     };
+    };
+   };
+
+   fb0: fbbase {
+    marvell,fb-name = "mmp-fb";
+    marvell,path-name = "mmp_pnpath";
+    marvell,overlay-id = <1>;
+    marvell,default-pixfmt = <0x108>;
+    marvell,buffer-num = <3>;
+    marvell,fb-mem = <0x17000000>;
+    status = "okay";
+   };
+
+
+   sdh3: sdh@d4281000 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&sdh3_pmx_func1 &sdh3_pmx_func2>;
+    bus-width = <8>;
+    non-removable;
+    marvell,sdh-pm-runtime-en;
+    marvell,sdh-quirks = <((1<<15))>;
+    marvell,sdh-quirks2 = <((1<<6))>;
+    marvell,sdh-host-caps = <((1 << 11))>;
+    marvell,sdh-host-caps2 = <(
+       (1 << 15) |
+       (1 << 1)
+      )>;
+    marvell,sdh-flags = <(
+      (1<<2) |
+      (1<<0) |
+      (1<<7)
+           )>;
+
+    marvell,sdh-dtr-data = <0 26000000 104000000 0 0>,
+      <2 52000000 104000000 0 0>,
+      <7 52000000 104000000 0 0>,
+      <9 0xffffffff 104000000 0 0>;
+    status = "okay";
+   };
+
+
+   sdh1: sdh@d4280000 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&sdh1_pmx_func1 &sdh1_pmx_func2 &sdh1_pmx_func3 &sdh1_pmx_func4 &sdh1_pmx_func5 &sdh1_pmx_func6>;
+    vqmmc-supply = <&ldo5>;
+    vmmc-supply = <&ldo11>;
+    cd-gpios = <&gpio 11 0>;
+    cd-inverted;
+    bus-width = <4>;
+    wp-inverted;
+    marvell,sdh-pm-runtime-en;
+    marvell,sdh-host-caps-disable = <(
+     (1 << 17)
+     |(1 << 19)
+     |(1 << 20)
+     |(1 << 22)
+     |(1 << 21)
+    )>;
+    marvell,sdh-quirks = <(
+      (1<<16) |
+      (1<<15)
+      )>;
+    marvell,sdh-quirks2 = <((1<<6))>;
+    marvell,sdh-host-caps2 = <((1<<8))>;
+    marvell,sdh-flags = <(
+      (1<<7) |
+      (1<<0)
+           )>;
+
+    marvell,sdh-dtr-data = <0 26000000 104000000 0 0>,
+      <3 52000000 104000000 0 0>,
+      <7 52000000 104000000 0 0>,
+      <9 0xffffffff 104000000 0 0>;
+    status = "okay";
+   };
+
+
+   sdh2: sdh@d4280800 {
+    pinctrl-names = "default", "fast", "sleep";
+    pinctrl-0 = <&sdh2_pmx_func1 &sdh2_pmx_func2 &sdh2_pmx_func3 &sdh2_pmx_func4 &sdh2_pmx_func5>;
+    pinctrl-1 = <&sdh2_pmx_func1_fast &sdh2_pmx_func2_fast &sdh2_pmx_func3 &sdh2_pmx_func4 &sdh2_pmx_func5>;
+    pinctrl-2 = <&sdh2_pmx_edge_wakeup>;
+    bus-width = <4>;
+    mrvl,clk-delay-cycles = <0x0>;
+    marvell,sdh-quirks = <(
+      (1<<15)
+      )>;
+    marvell,sdh-quirks2 = <(
+            (1<<6) |
+            (1<<7) |
+            (1<<8)
+            )>;
+    marvell,sdh-host-caps2 = <((1 << 18))>;
+    marvell,sdh-flags = <(
+      (1<<3) |
+      (1<<0) |
+      (1<<7) |
+      (1<<5) |
+      (1<<4)
+         )>;
+    marvell,sdh-pm-caps = <(
+               (1 << 0)
+               )>;
+
+    marvell,sdh-dtr-data = <0 26000000 104000000 0 0>,
+      <3 45000000 89142857 0 0>,
+      <6 208000000 208000000 0 0>,
+      <9 0xffffffff 89142857 0 0>;
+    status = "okay";
+   };
+
+   squ: squ@d42a0800 {
+    compatible = "marvell,pxa910-squ";
+    reg = <0xd42a0800 0x100>;
+    interrupts = <0 46 0x4>;
+    #dma-cells = <1>;
+    asram = <&sram>;
+   };
+
+   vpu-devfreq {
+    status = "okay";
+   };
+   geu: geu {
+    status = "okay";
+   };
+  };
+
+  apb@d4000000 {
+   pdma0: pdma@d4000000 {
+    status = "okay";
+   };
+
+   uart2: uart@d4017000 {
+    pinctrl-names = "default", "sleep";
+    pinctrl-0 = <&uart2_pmx_func1 &uart2_pmx_func2>;
+    pinctrl-1 = <&uart2_pmx_func1_sleep &uart2_pmx_func2>;
+    edge-wakeup-gpio = <47>;
+    status = "okay";
+   };
+
+   uart3: uart@d4018000 {
+    pinctrl-names = "default";
+    pinctrl-0 = <&uart3_pmx_func>;
+    status = "okay";
+   };
+
+   mfpr: mfpr@d401e000 {
+    pinctrl-names = "default";
+    reg = <0xd401e000 0x280>;
+    pinctrl-0 = <&mfp_pins_group_0 &mfp_pins_group_1>;
+    status = "ok";
+   };
+
+   edgewakeup: edgewakeup@d4019800 {
+    status = "ok";
+   };
+
+   rtc: rtc@d4010000 {
+    status = "okay";
+   };
+
+   thermal: thermal@d4013200 {
+    compatible = "marvell,pxa1088-thermal";
+    reg = <0xd4013200 0x50>;
+    interrupts = <0 60 0x4>;
+    trigger_levels_count = <0>;
+    type = <0>;
+    status = "ok";
+   };
+
+   watchdog: watchdog@d4080000 {
+    status = "okay";
+   };
+
+   ssp_dai1: pxa-ssp-dai@1 {
+    compatible = "mrvl,pxa-ssp-dai";
+    reg = <0x1 0x0>;
+    port = <&ssp1>;
+    pinctrl-names = "default","ssp";
+    pinctrl-0 = <&i2s_gpio>;
+    pinctrl-1 = <&i2s_func>;
+    ssp-gpio = <&gpio 21 0 &gpio 22 0 &gpio 23 0 &gpio 24 0>;
+    dmas = <&squ 1
+     &squ 0>;
+    dma-names = "rx", "tx";
+    asram = <&sram>;
+    platform_driver_name = "tdma_platform";
+    burst_size = <4>;
+    playback_period_bytes = <4096>;
+    playback_buffer_bytes = <20480>;
+    capture_period_bytes = <4096>;
+    capture_buffer_bytes = <20480>;
+   };
+
+   ssp_dai4: pxa-ssp-dai@4 {
+    compatible = "mrvl,pxa-ssp-dai";
+    reg = <0x4 0x0>;
+    port = <&ssp4>;
+    pinctrl-names = "default","ssp";
+    pinctrl-0 = <&gssp_gpio>;
+    pinctrl-1 = <&gssp_func>;
+    ssp-gpio = <&gpio 25 0 &gpio 26 0 &gpio 27 0 &gpio 28 0>;
+    dmas = <&pdma0 6 0
+     &pdma0 7 0>;
+    dma-names = "rx", "tx";
+    platform_driver_name = "pdma_platform";
+    burst_size = <8>;
+    playback_period_bytes = <4096>;
+    playback_buffer_bytes = <131072>;
+    capture_period_bytes = <4096>;
+    capture_buffer_bytes = <131072>;
+   };
+
+   gpio: gpio@d4019000 {
+    status = "okay";
+
+
+
+
+
+    gcb0: gpio@d4019000 {
+
+     gpio-ranges = <&pmx 0 55 32>;
+    };
+    gcb1: gpio@d4019004 {
+     gpio-ranges = <&pmx 0 87 23>;
+    };
+    gcb2: gpio@d4019008 {
+     gpio-ranges = <&pmx 3 110 29>;
+    };
+    gcb3: gpio@d4019100 {
+     gpio-ranges = <&pmx 0 139 3 &pmx 28 52 1>;
+    };
+   };
+
+   pmx: pinmux@d401e000 {
+
+    pinctrl-single,gpio-range = <
+
+
+
+
+
+
+     &range 55 55 0
+     &range 110 32 0
+     &range 17 1 1
+     &range 52 1 0
+    >;
+
+    cam_pmx_gpio: cam_pmx_gpio {
+     pinctrl-single,pins = <
+      0x01e0 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+    cam_pmx_func1: cam_pmx_func1 {
+     pinctrl-single,pins = <
+      0x01e0 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+    cam_pmx_func2: cam_pmx_func2 {
+     pinctrl-single,pins = <
+      0x01b8 0x1
+      0x01bc 0x1
+      0x01c0 0x1
+      0x01c4 0x1
+      0x01c8 0x1
+      0x01cc 0x1
+      0x01d0 0x1
+      0x01d4 0x1
+      0x01d8 0x1
+      0x01dc 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    cam_pmx_func3: cam_pmx_func3 {
+     pinctrl-single,pins = <
+      0x01e4 0x1
+     >;
+     pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;
+    };
+
+    cam_pmx_func4: cam_pmx_func4 {
+     pinctrl-single,pins = <
+      0x0114 0x0
+      0x0118 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    cam_pmx_func5: cam_pmx_func5 {
+     pinctrl-single,pins = <
+      0x01f0 0x0
+      0x01f4 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+
+    mfp_pins_group_0: mfp_pins_group_0 {
+     pinctrl-single,pins = <
+      0x0020 0x1
+      0x001c 0x1
+      0x0018 0x1
+      0x0014 0x1
+      0x0010 0x1
+      0x000c 0x1
+      0x0054 0x0
+      0x0058 0x0
+      0x0060 0x0
+      0x0068 0x1
+      0x0078 0x0
+      0x0048 0x1
+      0x004c 0x1
+      0x0050 0x1
+      0x0234 0x0
+      0x00cc 0x1
+      0x006c 0x0
+      0x00d4 0x1
+     >;
+     pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    mfp_pins_group_1: mfp_pins_group_1 {
+     pinctrl-single,pins = <
+      0x0100 0x0
+      0x0008 0x1
+      0x0004 0x1
+     >;
+     pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+
+    sdh1_pmx_func1: sdh1_pmx_func1 {
+     pinctrl-single,pins = <
+      0x0084 0x0
+      0x0088 0x0
+      0x008c 0x0
+      0x0090 0x0
+      0x00b0 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+
+    sdh1_pmx_func2: sdh1_pmx_func2 {
+     pinctrl-single,pins = <
+      0x0094 0x0
+      0x0098 0x0
+      0x009c 0x0
+      0x00a0 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+
+    sdh1_pmx_func3: sdh1_pmx_func3 {
+     pinctrl-single,pins = <
+      0x00a8 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+
+    sdh1_pmx_func4: sdh1_pmx_func4 {
+     pinctrl-single,pins = <
+      0x00ac 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;PULL_HIGH;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+
+    sdh1_pmx_func5: sdh1_pmx_func5 {
+     pinctrl-single,pins = <
+      0x00a4 0x0
+     >;
+     pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+
+    sdh1_pmx_func6: sdh1_pmx_func6 {
+     pinctrl-single,pins = <
+      0x0108 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    sdh2_pmx_func1_fast: sdh2_pmx_func1_fast {
+      pinctrl-single,pins = <
+       0x0170 0x1
+       0x0174 0x1
+       0x0178 0x1
+       0x017c 0x1
+       0x0180 0x1
+      >;
+      pinctrl-single,drive-strength = <0x0000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    sdh2_pmx_func2_fast: sdh2_pmx_func2_fast {
+      pinctrl-single,pins = <
+       0x0184 0x1
+      >;
+      pinctrl-single,drive-strength = <0x0000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    sdh2_pmx_func1: sdh2_pmx_func1 {
+     pinctrl-single,pins = <
+      0x0170 0x1
+      0x0174 0x1
+      0x0178 0x1
+      0x017c 0x1
+      0x0180 0x1
+     >;
+     pinctrl-single,drive-strength = <0x0000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    sdh2_pmx_func2: sdh2_pmx_func2 {
+     pinctrl-single,pins = <
+      0x01fc 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    sdh2_pmx_func3: sdh2_pmx_func3 {
+     pinctrl-single,pins = <
+      0x01a8 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0x8000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0x8000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;
+    };
+
+    sdh2_pmx_func4: sdh2_pmx_func4 {
+     pinctrl-single,pins = <
+      0x01f8 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0x8000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0x8000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    sdh2_pmx_func5: sdh2_pmx_func5 {
+     pinctrl-single,pins = <
+      0x0184 0x1
+     >;
+     pinctrl-single,drive-strength = <0x0000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    sdh2_pmx_edge_wakeup: sdh2_pmx_edge_wakeup {
+      pinctrl-single,pins = <
+       0x0178 0x1
+      >;
+      pinctrl-single,drive-strength = <0x1000 0x1800>;PULL_LOW;pinctrl-single,input-schmitt = <0x30 0x30>; pinctrl-single,input-schmitt-enable = <0x0 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+
+    sdh3_pmx_func1: sdh3_pmx_func1 {
+     pinctrl-single,pins = <
+      0x0024 0x1
+      0x0028 0x1
+      0x002c 0x1
+      0x0030 0x1
+      0x0034 0x1
+      0x0038 0x1
+      0x003c 0x1
+      0x0040 0x1
+      0x005c 0x1
+      0x006c 0x2
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+
+    sdh3_pmx_func2: sdh3_pmx_func2 {
+     pinctrl-single,pins = <
+      0x0064 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    uart2_pmx_func1: uart2_pmx_func1 {
+     pinctrl-single,pins = <
+      0x0198 0x6
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    uart2_pmx_func2: uart2_pmx_func2 {
+     pinctrl-single,pins = <
+      0x019c 0x6
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    uart2_pmx_func1_sleep: uart2_pmx_func1_sleep {
+     pinctrl-single,pins = <
+      0x0198 0x6
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    uart3_pmx_func: uart3_pmx_func {
+     pinctrl-single,pins = <
+      0x0190 0x1
+      0x0194 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    i2s_func: i2s_func {
+     pinctrl-single,pins = <
+      0x0130 0x1
+      0x0134 0x1
+      0x0138 0x1
+      0x013c 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    i2s_gpio: i2s_gpio {
+     pinctrl-single,pins = <
+      0x0130 0x0
+      0x0134 0x0
+      0x0138 0x0
+      0x013c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+
+    dvc_pmx_func: dvc_pmx_func {
+     pinctrl-single,pins = <
+      0x0188 0x6
+      0x018c 0x6
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    gssp_func: gssp_func {
+     pinctrl-single,pins = <
+      0x0140 0x1
+      0x0144 0x1
+      0x0148 0x1
+      0x014c 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    gssp_gpio: gssp_gpio {
+     pinctrl-single,pins = <
+      0x0140 0x0
+      0x0144 0x0
+      0x0148 0x0
+      0x014c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    gdet_gpio: gdet_gpio {
+     pinctrl-single,pins = <
+      0x0230 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;LPM_PULLHIGH;
+    };
+
+    codec_int: codec_int {
+     pinctrl-single,pins = <
+      0x00d0 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;LPM_PULLHIGH;
+    };
+
+
+    lcd_pmx: lcd_pmx {
+     pinctrl-single,pins = <
+      0x00f4 0x0
+      0x00f8 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0x8000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0x8000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+
+    lcd_rst_pmx: lcd_rst_pmx {
+     pinctrl-single,pins = <
+      0x0124 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+
+    lcd_rst_pmx_sleep: lcd_rst_pmx_sleep {
+     pinctrl-single,pins = <
+      0x0124 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x208 0x388>;
+    };
+
+    lcd_esd_pmx: lcd_esd_pmx {
+     pinctrl-single,pins = <
+      0x0128 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x308 0x388>;
+    };
+
+
+    usim_pmx_gpio: usim_pmx_gpio {
+     pinctrl-single,pins = <
+      0x0044 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    usim_pmx_sleep: usim_pmx_sleep {
+     pinctrl-single,pins = <
+      0x0044 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0x30 0x30>; pinctrl-single,input-schmitt-enable = <0x0 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    twsi0_pmx_func: twsi0_pmx_func {
+     pinctrl-single,pins = <
+      0x01e8 0x1
+      0x01ec 0x1
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+    twsi0_pmx_gpio: twsi0_pmx_gpio {
+     pinctrl-single,pins = <
+      0x01e8 0x0
+      0x01ec 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+    twsi1_pmx_func: twsi1_pmx_func {
+     pinctrl-single,pins = <
+      0x0208 0x5
+      0x020c 0x5
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    twsi1_pmx_gpio: twsi1_pmx_gpio {
+     pinctrl-single,pins = <
+      0x0208 0x0
+      0x020c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+    tsp_gpio_func: tsp_gpio_func {
+     pinctrl-single,pins = <
+      0x0224 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    sensors_i2c_pmx: sensors_i2c_pmx {
+     pinctrl-single,pins = <
+      0x0168 0x0
+      0x016c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    accel_gpio_pmx: accel_gpio_pmx {
+     pinctrl-single,pins = <
+      0x0104 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;
+    };
+
+    accel_suspend_pmx: accel_suspend_pmx {
+     pinctrl-single,pins = <
+      0x0104 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;
+    };
+
+    grip_gpio_pmx: grip_gpio_pmx {
+     pinctrl-single,pins = <
+      0x0164 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;
+    };
+
+    vib_gpio_pmx: vib_gpio_pmx {
+     pinctrl-single,pins = <
+      0x022c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    gpio_keys_func: gpio_keys_func{
+     pinctrl-single,pins = <
+      0x00e0 0x0
+      0x00e4 0x0
+      0x0110 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    gpio_keys_sleep: gpio_keys_sleep {
+     pinctrl-single,pins = <
+      0x0110 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0x30 0x30>; pinctrl-single,input-schmitt-enable = <0x0 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    camera_i2c_pmx: camera_i2c_pmx {
+     pinctrl-single,pins = <
+      0x0154 0x0
+      0x0150 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+    gpio_charger_func1: gpio_charger__func1 {
+     pinctrl-single,pins = <
+      0x00fc 0x0
+      >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+
+    gpio_charger_func2: gpio_charger_func2 {
+     pinctrl-single,pins = <
+      0x012c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+    muic_gpio_pmx: muic_gpio_pmx {
+     pinctrl-single,pins = <
+      0x0220 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    charger_i2c_pmx: charger_i2c_pmx {
+     pinctrl-single,pins = <
+      0x0120 0x0
+      0x011c 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+
+    muic_i2c_pmx: muic_i2c_pmx {
+     pinctrl-single,pins = <
+      0x01a4 0x0
+      0x01a0 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x288 0x388>;
+    };
+    gps_pmx_eclk: gps_pmx_eclk {
+
+     pinctrl-single,pins = <
+      0x0210 0x5
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+    gps_pmx_gpio: gps_pmx_gpio {
+
+     pinctrl-single,pins = <
+      0x0210 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x0000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x0000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;
+    };
+    gps_pmx_poweronoff: gps_pmx_poweronoff {
+     pinctrl-single,pins = <
+      0x00ec 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0x8000 0xc000 0x8000 0xc000>; pinctrl-single,bias-pulldown = <0xa000 0xa000 0 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;MFP_LPM_DIRVE_LOW;
+    };
+    gps_pmx_reset: gps_pmx_reset {
+     pinctrl-single,pins = <
+      0x00f0 0x0
+     >;
+     pinctrl-single,drive-strength = <0x1000 0x1800>;pinctrl-single,bias-pullup = <0xc000 0xc000 0 0xc000>; pinctrl-single,bias-pulldown = <0x8000 0xa000 0x8000 0xa000>;pinctrl-single,input-schmitt = <0 0x30>; pinctrl-single,input-schmitt-enable = <0x40 0 0x40 0x40>;pinctrl-single,lpm-output = <0x0 0x388>;MFP_LPM_DIRVE_HIGH;
+    };
+   };
+
+   usim: usim {
+    compatible = "usim_event";
+    pinctrl-names = "default", "sleep";
+    pinctrl-0 = <&usim_pmx_gpio>;
+    pinctrl-1 = <&usim_pmx_sleep>;
+    edge-wakeup-gpio = <101>;
+    status = "okay";
+   };
+
+   twsi0: i2c@d4011000 {
+    pinctrl-names = "default","gpio";
+    pinctrl-0 = <&twsi0_pmx_func>;
+    pinctrl-1 = <&twsi0_pmx_gpio>;
+    i2c-gpio = <&gpio 79 0 &gpio 80 0>;
+    marvell,i2c-always-on;
+    status = "okay";
+   };
+
+   twsi1: i2c@d4010800 {
+    pinctrl-names = "default", "gpio";
+    pinctrl-0 = <&twsi1_pmx_func>;
+    pinctrl-1 = <&twsi1_pmx_gpio>;
+    i2c-gpio = <&gpio 87 0 &gpio 88 0>;
+    marvell,i2c-always-on;
+    status = "okay";
+    tsp@20 {
+     compatible = "zinitix,bt532_tsp";
+     pinctrl-names = "default";
+     pinctrl-0 = <&tsp_gpio_func>;
+     reg = <0x20>;
+     interrupt-parent = <&gpio>;
+     interrupts = <94 2>;
+     bt532,x_resolution = /bits/ 16 <799>;
+     bt532,y_resolution = /bits/ 16 <1279>;
+     bt532,orientation = /bits/ 8 <0>;
+     bt532,page_size = /bits/ 16 <128>;
+     tsp_gpio = <&gpio 94 1>;
+     tsp_vdd_supply_type = <1>;
+     tsp_vdd-supply = <&ldo1>;
+    };
+   };
+
+   twsi2: i2c@d4037000 {
+    status = "okay";
+
+    pmic: 88pm822@30 {
+     reg = <0x30>;
+     interrupts = <0 4 0x4>;
+     interrupt-parent = <&gic>;
+     dvc {
+      compatible = "marvell,88pm8xx-dvc";
+
+      dvc-affected-buckbits = <21>;
+      pinctrl-names = "default";
+      pinctrl-0 = <&dvc_pmx_func>;
+     };
+     usb: usb {
+      compatible = "marvell,88pm80x-usb";
+      vbus-gpio = <0xff>;
+      id-gpadc = <0xff>;
+     };
+
+    };
+    pmic2: 88pm805@38 {
+     compatible = "marvell,88pm805";
+     reg = <0x38>;
+     interrupt-parent = <&gpio>;
+     interrupts = <124 0x1>;
+     marvell,88pm805-irq-write-clear;
+     pinctrl-names = "default";
+     pinctrl-0 = <&codec_int>;
+    };
+   };
+
+   acipc: acipc@d401d000 {
+    status = "okay";
+   };
+
+   seh: seh@d4080000 {
+    compatible = "mrvl,seh";
+    reg = <0xd4080000 0x100>;
+    interrupts = <0 35 0x4>;
+    interrupt-names = "WDT";
+    watchdog-type = <0>;
+    status = "okay";
+   };
+
+  };
+  soc-camera@0 {
+    status = "okay";
+  };
+  soc-camera@1 {
+   status = "okay";
+  };
+# 1063 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts"
+  ramoops {
+   compatible = "pstore,ramoops";
+   mem-size = <0x40000>;
+   mem-address = <0x8100000>;
+   record-size = <0x8000>;
+   console-size = <0x30000>;
+   dump-oops = <0>;
+   status = "okay";
+  };
+
+ };
+ sound {
+  compatible = "marvell,pxa-88pm805-snd-card";
+  ssp-controllers = <&ssp_dai1 &ssp_dai4>;
+ };
+  sec-log {
+                        compatible = "sec-log";
+                        status = "okay";
+                };
+ muici2c: i2c@7 {
+  compatible = "i2c-gpio";
+  reg = <0x2 0x0>;
+
+  gpios = <&gpio 50 0
+   &gpio 49 0>;
+
+
+
+
+  i2c-gpio,delay-us = <3>;
+  i2c-gpio,timeout-ms = <100>;
+
+  #address-cells = <1>;
+  #size-cells = <0>;
+  pinctrl-names = "default";
+  pinctrl-0 = <&muic_i2c_pmx>;
+
+  status = "okay";
+
+  muic@25 {
+   compatible = "samsung,sm5502";
+   pinctrl-names = "default","sleep";
+   pinctrl-0 = <&muic_gpio_pmx>;
+   reg = <0x25>;
+   interrupt-parent = <&gpio>;
+   interrupts = <93 1>;
+   connector-gpio = <&gpio 93 0>;
+  };
+ };
+
+
+ chargeri2c: i2c@8 {
+            compatible = "i2c-gpio";
+  reg = <0x3 0x0>;
+  gpios = <&gpio 17 0
+  &gpio 16 0>;
+
+
+
+
+  i2c-gpio,delay-us = <3>;
+  i2c-gpio,timeout-ms = <100>;
+
+  #address-cells = <1>;
+  #size-cells = <0>;
+  pinctrl-names = "default";
+  pinctrl-0 = <&charger_i2c_pmx>;
+
+  status = "okay";
+  charger@49 {
+   compatible = "samsung,sec-charger";
+   pinctrl-names = "default";
+   pinctrl-0 = <&gpio_charger_func1 &gpio_charger_func2>;
+   reg = <0x49>;
+   interrupt-parent = <&gpio>;
+   chgirq-gpio = <&gpio 8 0>;
+   chgen-gpio = <&gpio 20 0>;
+   chg-irq-attr = <(2 | 1)>;
+   chg-float-voltage = <4350>;
+  };
+ };
+
+ sensori2c: i2c-gpio@5 {
+  compatible = "i2c-gpio";
+  gpios = <&gpio 36 0
+    &gpio 35 0>;
+
+  pinctrl-names = "default";
+  pinctrl-0 = <&sensors_i2c_pmx>;
+
+  status = "okay";
+
+  #address-cells = <1>;
+  #size-cells = <0>;
+
+  bma255-i2c@18 {
+   compatible = "bma255-i2c";
+   pinctrl-names = "default","sleep";
+   pinctrl-0 = <&accel_gpio_pmx>;
+   pinctrl-1 = <&accel_suspend_pmx>;
+   reg = <0x18>;
+   interrupt-parent = <&gpio>;
+   interrupts = <10 1>;
+   acc_int = <&gpio 10 0>;
+   acc_chip_pos = <7>;
+  };
+  sx9500-i2c@28 {
+   compatible = "sx9500-i2c";
+   pinctrl-names = "default","sleep";
+   pinctrl-0 = <&grip_gpio_pmx>;
+   reg = <0x28>;
+   interrupt-parent = <&gpio>;
+   interrupts = <34 2>;
+   grip_Nirq = <&gpio 33 0>;
+  };
+ };
+
+ camerai2c: i2c@6 {
+  compatible = "i2c-gpio";
+  gpios = <&gpio 30 0
+  &gpio 29 0>;
+  i2c-gpio,delay-us = <3>;
+  i2c-gpio,timeout-ms = <100>;
+  pinctrl-names = "default";
+  pinctrl-0 = <&camera_i2c_pmx>;
+  status = "okay";
+ };
+
+ ion {
+  marvell,ion-nr = <2>;
+  status = "okay";
+
+  heap1 {
+   marvell,ion-name = "carveout_heap";
+   marvell,ion-type = <2>;
+   marvell,ion-id = <2>;
+  };
+
+  heap2 {
+   marvell,ion-name = "system_heap";
+   marvell,ion-type = <0>;
+   marvell,ion-id = <0>;
+  };
+ };
+
+ sd8x-rfkill {
+  sd-host = <&sdh2>;
+  pd-gpio = <&gpio 51 0>;
+  rst-gpio = <&gpio 0 0>;
+  edge-wakeup-gpio = <&gpio 39 0>;
+  hostwu-gpio = <&gpio 83 0>;
+  v_wib_3v3-supply=<&ldo10>;
+  status = "okay";
+ };
+
+ battery {
+  status = "okay";
+  compatible = "samsung,sec-battery";
+
+  vendor = "SDI SDI";
+  charger_name = "sec-charger";
+  fuelgauge_name = "sec-fuelgauge";
+  technology = <2>;
+
+  chip_vendor = "LSI";
+  polling_time = <10 30 30 30 3600>;
+
+  temp_table_adc = <276 326 383 455 530 629 740 787 866 1013
+   1181 1361 1564 1792 2024 2263 2493 2728 2948 3011
+   3135 3208 3313 3465 3588 3698 3779>;
+  temp_table_data = <900 850 800 750 700 650 600 580 550 500
+   450 400 350 300 250 200 150 100 50 30
+   0 (-20) (-50) (-100) (-150) (-200) (-250)>;
+
+  input_current_limit = <950 0 0 1000 460 950 950 460 500 0 760 950 0 0 0 400 700 950 300 950 950>;
+  fast_charging_current = <1000 0 0 1200 460 1000 1000 460 500 0 900 1000 0 0 0 400 700 1000 300 1000 1000>;
+  full_check_current_1st = <250 0 0 250 250 250 250 250 250 0 250 250 0 0 0 250 250 250 250 250 250>;
+  full_check_current_2nd = <2400 0 0 2400 2400 2400 2400 2400 2400 0 2400 2400 0 0 0 2400 2400 2400 2400 2400 2400>;
+
+  adc_check_count = <5>;
+
+  cable_check_type = <5>;
+  cable_source_type = <1>;
+  event_waiting_time = <600>;
+  polling_type = <1>;
+  monitor_initial_count = <0>;
+
+  battery_check_type = <4>;
+  check_count = <0>;
+  check_adc_max = <1440>;
+  check_adc_min = <0>;
+
+  ovp_uvlo_check_type = <4>;
+
+  thermal_source = <0>;
+
+  temp_check_type = <2>;
+  temp_check_count = <1>;
+  temp_high_threshold_event = <600>;
+  temp_high_recovery_event = <460>;
+  temp_low_threshold_event = <(-30)>;
+  temp_low_recovery_event = <0>;
+  temp_high_threshold_normal = <540>;
+  temp_high_recovery_normal = <460>;
+  temp_low_threshold_normal = <(-50)>;
+  temp_low_recovery_normal = <30>;
+  temp_high_threshold_lpm = <540>;
+  temp_high_recovery_lpm = <460>;
+  temp_low_threshold_lpm = <(-50)>;
+  temp_low_recovery_lpm = <30>;
+  full_check_type = <7>;
+  full_check_type_2nd = <3>;
+  full_check_count = <1>;
+  chg_gpio_full_check = <0>;
+  chg_polarity_full_check = <1>;
+
+
+
+
+  full_condition_type = <13>;
+  full_condition_soc = <100>;
+  full_condition_vcell = <4300>;
+
+  recharge_check_count = <2>;
+  recharge_condition_type = <4>;
+  recharge_condition_soc = <98>;
+  recharge_condition_vcell = <4300>;
+
+  charging_total_time = <21600>;
+  recharging_total_time = <5400>;
+  charging_reset_time = <0>;
+ };
+
+ sec-fuelgauge {
+  capacity-max = <1000>;
+  capacity-max-margin = <30>;
+  capacity-min = <0>;
+  fg-irq-attr = <2>;
+  fuel-alert-soc = <1>;
+  temp_adc_channel = <2>;
+ };
+
+ vibrator: vibrator {
+ compatible = "marvell,android-vibrator";
+ pinctrl-names = "default";
+ pinctrl-0 = <&vib_gpio_pmx>;
+ android_vibrator,vib_ldo_en = <&gpio 96 0>;
+ };
+
+ panel {
+  compatible = "marvell,mmp-dsi-panel";
+  pinctrl-names = "default", "enable", "disable";
+  pinctrl-0 = <&lcd_pmx &lcd_rst_pmx &lcd_esd_pmx>;
+  pinctrl-1 = <&lcd_rst_pmx>;
+  pinctrl-2 = <&lcd_rst_pmx_sleep>;
+  marvell,path-name = "mmp_pnpath";
+  marvell,dsi-panel = <&mmp_dsi_panel>;
+  interrupt-parent = <&gpio>;
+  interrupts = <6 1>;
+  marvell,panel-esd-en;
+  marvell,panel-esd-gpio = <&gpio 19 0>;
+  marvell,panel-esd-type = <1>;
+  marvell,panel-backlight = <&backlight>;
+  panel-ext-pin {
+
+
+
+
+
+
+
+   panel-ext-pin-on = <
+    &panel_pwr_vcc 1 0
+    &panel_pwr_vdd 1 0
+    &panel_pwr_rst 1 20
+    &panel_pwr_rst 0 2000
+    &panel_pwr_rst 1 5000
+    >;
+   panel-ext-pin-off = <
+    &panel_pwr_rst 0 10
+    &panel_pwr_vcc 0 10
+    &panel_pwr_vdd 0 10
+    >;
+# 1354 "arch/arm/boot/dts/pxa1088-degas3g-r01.dts"
+   panel_pwr_rst: panel-pwr-rst {
+    panel-ext-pin-name = "rst";
+    panel-ext-pin-type = <0>;
+    panel-ext-pin-gpio = <&gpio 18 0>;
+   };
+   panel_pwr_vcc: panel-pwr-vcc {
+    panel-ext-pin-name = "vcc";
+    panel-ext-pin-type = <0>;
+    panel-ext-pin-gpio = <&gpio 6 0>;
+   };
+   panel_pwr_vdd: panel-pwr-vdd {
+    panel-ext-pin-name = "vdd";
+    panel-ext-pin-type = <0>;
+    panel-ext-pin-gpio = <&gpio 7 0>;
+   };
+  };
+  mmp_dsi_panel: mmp-dsi-panel {};
+ };
+
+ panel-modes {
+
+
+
+
+
+
+  compatible = "mmp-panel-modes";
+  xres = <800>;
+  yres = <1280>;
+ };
+
+ backlight: mmp-panel-backlight {
+  compatible = "marvell,mmp-panel-backlight";
+  marvell,panel-backlight-name = "panel";
+  marvell,panel-backlight-brt-range = <
+   0 0
+   10 2
+   10 2
+   143 73
+   255 170
+  >;
+ };
+
+ gps: mmp-gps {
+  compatible = "marvell,mmp-gps";
+  marvell,gps-eclk-ctrl;
+
+  vgps-supply = <&ldo13>;
+
+  pinctrl-names = "default", "idle";
+  pinctrl-0 = <&gps_pmx_eclk &gps_pmx_poweronoff &gps_pmx_reset>;
+  pinctrl-1 = <&gps_pmx_gpio>;
+
+  on-off-gpio = <&gpio 4 0>;
+  reset-n-gpio = <&gpio 5 0>;
+ };
+ dip {
+  compatible = "marvell,simple-dip";
+ };
+ sec-thermistor {
+  compatible = "samsung,sec-thermistor";
+  status = "okay";
+  adc-channel = <1>;
+
+  adc_array = <69 75 81 87 93 99 106 113 120 127 135 142 149 156 163 170 180 188 196 204 212 220
+     228 236 244 252 261 270 279 288 297 306 315 324 333 342 359 373 387 401 415 429 443
+     457 471 485 505 525 545 565 590 610 635 660 680 703 733 765 825 860 870 890 928 952
+     988 1030 1075 1120 1170 1207 1263 1312 1355 1356 1357 1358 1359 1360 1361 1362 1363
+     1364 1365 1366 1367 1368>;
+
+  temp_array = <750 740 730 720 710 700 690 680 670 660 650 640 630 620 610 600 590 580 570 560
+     550 540 530 520 510 500 490 480 470 460 450 440 430 420 410 400 390 380 370 360 350
+     340 330 320 310 300 290 280 270 260 250 240 230 220 210 200 190 180 170 160 150 140
+     130 120 110 100 90 80 70 60 50 40 30 20 10 0 (-10) (-20) (-30) (-40) (-50) (-60) (-70)
+     (-80) (-90) (-100)>;
+ };
+};
+/include/ "88pm8xx.dtsi"
+&pmic {
+ regulators {
+  BUCK4 {
+   regulator-compatible = "88PM800-BUCK4";
+   regulator-min-microvolt = <600000>;
+   regulator-max-microvolt = <3300000>;
+   regulator-boot-on;
+   regulator-always-on;
+  };
+  LDO6 {
+   regulator-compatible = "88PM800-LDO6";
+   regulator-min-microvolt = <1200000>;
+   regulator-max-microvolt = <3300000>;
+  };
+  LDO7 {
+   regulator-compatible = "88PM800-LDO7";
+   regulator-min-microvolt = <1200000>;
+   regulator-max-microvolt = <3300000>;
+   regulator-boot-on;
+   regulator-always-on;
+  };
+ };
+ headset {
+  compatible = "marvell,88pm80x-headset";
+  marvell,switch-name = "h2w";
+  marvell,headset-flag = <0>;
+
+  marvell,press-release-th = <950>;
+  marvell,micbias-supply = <&ldo14>;
+
+  marvell,hook-press-th = <70>;
+  marvell,vol-up-press-th = <300>;
+  marvell,vol-down-press-th = <800>;
+  marvell,mic-det-th = <600>;
+
+  pinctrl-names = "default";
+  pinctrl-0 = <&gdet_gpio>;
+
+  headset-gdet-gpio = <&gpio 97 0>;
+
+
+
+
+
+  sec0,adc_high = <0>;
+  sec0,delay_ms = <20>;
+  sec0,check_count = <2>;
+  sec0,jack_type = <2>;
+
+
+
+
+  sec1,adc_high = <1001>;
+  sec1,delay_ms = <20>;
+  sec1,check_count = <5>;
+  sec1,jack_type = <2>;
+
+
+
+
+  sec2,adc_high = <1002>;
+  sec2,delay_ms = <20>;
+  sec2,check_count = <10>;
+  sec2,jack_type = <1>;
+
+
+
+
+  sec3,adc_high = <1700>;
+  sec3,delay_ms = <20>;
+  sec3,check_count = <2>;
+  sec3,jack_type = <1>;
+
+
+
+
+  sec4,adc_high = <0x7fffffff>;
+  sec4,delay_ms = <10>;
+  sec4,check_count = <1000>;
+  sec4,jack_type = <2>;
+
+
+
+  sec_sendend0,code = <0x4000>;
+  sec_sendend0,adc_low =<0>;
+  sec_sendend0,adc_high =<170>;
+
+
+  sec_sendend1,code = <0x2000>;
+  sec_sendend1,adc_low =<171>;
+  sec_sendend1,adc_high =<344>;
+
+
+  sec_sendend2,code = <0x1000>;
+  sec_sendend2,adc_low =<345>;
+  sec_sendend2,adc_high =<900>;
+ };
+};
+
+/include/ "mmp-dsi-panel-s6d7aa0x-boe-wxga-video.dtsi"

@@ -1,0 +1,3 @@
+kernel/drivers/pinctrl/pinctrl-single.ko
+kernel/drivers/pinctrl/pinctrl-mmp-edgewakeup.ko
+kernel/drivers/pinctrl/pinctrl-mmp.ko

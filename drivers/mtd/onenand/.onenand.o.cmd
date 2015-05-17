@@ -1,0 +1,1 @@
+cmd_drivers/mtd/onenand/onenand.o := /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o drivers/mtd/onenand/onenand.o drivers/mtd/onenand/onenand_base.o drivers/mtd/onenand/onenand_bbt.o 

@@ -1,0 +1,1 @@
+cmd_drivers/media/dvb-frontends/built-in.o :=  rm -f drivers/media/dvb-frontends/built-in.o; /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ar rcsD drivers/media/dvb-frontends/built-in.o

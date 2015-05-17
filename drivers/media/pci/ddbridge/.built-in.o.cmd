@@ -1,0 +1,1 @@
+cmd_drivers/media/pci/ddbridge/built-in.o :=  rm -f drivers/media/pci/ddbridge/built-in.o; /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ar rcsD drivers/media/pci/ddbridge/built-in.o

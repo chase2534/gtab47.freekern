@@ -1,0 +1,3 @@
+kernel/drivers/misc/sd8x_rfkill.ko
+kernel/drivers/misc/regs-addr.ko
+kernel/drivers/misc/mmp_gps.ko

@@ -1,0 +1,1 @@
+cmd_arch/arm/plat-pxa/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o arch/arm/plat-pxa/built-in.o arch/arm/plat-pxa/dma.o arch/arm/plat-pxa/debugfs.o arch/arm/plat-pxa/mfp.o arch/arm/plat-pxa/ssp.o arch/arm/plat-pxa/panic.o 

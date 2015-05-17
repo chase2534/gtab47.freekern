@@ -1,0 +1,2 @@
+kernel/drivers/usb/phy/phy-mv-usb2.ko
+kernel/drivers/usb/phy/phy-mv-connector.ko

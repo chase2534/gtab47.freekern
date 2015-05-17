@@ -1,0 +1,1 @@
+cmd_drivers/char/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o drivers/char/built-in.o drivers/char/mem.o drivers/char/random.o drivers/char/misc.o drivers/char/88pm80x_usb.o drivers/char/pxa9xx_acipc.o 

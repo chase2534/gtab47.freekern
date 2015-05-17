@@ -1,0 +1,1 @@
+cmd_drivers/dma/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o drivers/dma/built-in.o drivers/dma/dmaengine.o drivers/dma/of-dma.o drivers/dma/mmp_tdma.o drivers/dma/mmp_pdma.o 

@@ -1,0 +1,1 @@
+cmd_fs/nfs_common/nfs_acl.o := /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o fs/nfs_common/nfs_acl.o fs/nfs_common/nfsacl.o 

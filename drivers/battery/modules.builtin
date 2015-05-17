@@ -1,0 +1,2 @@
+kernel/drivers/battery/88pm80x_fuelgauge.ko
+kernel/drivers/battery/sm5414_charger.ko

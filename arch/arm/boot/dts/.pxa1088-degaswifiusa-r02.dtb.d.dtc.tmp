@@ -1,0 +1,1 @@
+arch/arm/boot/dts/pxa1088-degaswifiusa-r02.dtb: arch/arm/boot/dts/.pxa1088-degaswifiusa-r02.dtb.dts.tmp arch/arm/boot/dts/skeleton.dtsi arch/arm/boot/dts/88pm8xx.dtsi arch/arm/boot/dts/mmp-dsi-panel-s6d7aa0x-boe-wxga-video.dtsi

@@ -1,0 +1,11 @@
+pxa1088-degaswifiusa-r03.o: \
+ arch/arm/boot/dts/pxa1088-degaswifiusa-r03.dts \
+ /mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h \
+ /mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/gpio/gpio.h \
+ /mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/mmc/pxa_sdhci.h \
+ /mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/linux/sizes.h \
+ /mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/video/mmp_disp.h \
+ arch/arm/boot/dts/sec-machtypes.h \
+ arch/arm/boot/dts/sec-pxa1x88-pinfunc.h arch/arm/boot/dts/pxa1088.dtsi \
+ arch/arm/boot/dts/pxa988-pm.h arch/arm/boot/dts/pxa988-pinfunc.h \
+ /mnt/640/ubu/gtabkernelsrc/kernelsrc/arch/arm/boot/dts/include/dt-bindings/usb/mv_usb_phy.h

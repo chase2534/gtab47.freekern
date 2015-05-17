@@ -1,0 +1,1 @@
+cmd_sound/soc/pxa/snd-soc-pxa-ssp.o := /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o sound/soc/pxa/snd-soc-pxa-ssp.o sound/soc/pxa/pxa-ssp.o 

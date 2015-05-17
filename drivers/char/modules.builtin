@@ -1,0 +1,2 @@
+kernel/drivers/char/88pm80x_usb.ko
+kernel/drivers/char/pxa9xx_acipc.ko

@@ -1,0 +1,1 @@
+cmd_fs/jffs2/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o fs/jffs2/built-in.o fs/jffs2/jffs2.o 

@@ -1,0 +1,1 @@
+cmd_drivers/uio/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o drivers/uio/built-in.o drivers/uio/uio.o drivers/uio/uio_coda7542.o drivers/uio/uio_area51.o 

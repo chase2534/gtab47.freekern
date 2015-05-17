@@ -1,0 +1,5 @@
+kernel/sound/soc/snd-soc-core.ko
+kernel/sound/soc/codecs/snd-soc-secjack.ko
+kernel/sound/soc/codecs/snd-soc-88pm805.ko
+kernel/sound/soc/pxa/snd-soc-pxa-ssp.ko
+kernel/sound/soc/pxa/snd-soc-pxa.ko

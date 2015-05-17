@@ -1,0 +1,1 @@
+cmd_sound/soc/codecs/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o sound/soc/codecs/built-in.o sound/soc/codecs/snd-soc-secjack.o sound/soc/codecs/snd-soc-88pm805.o 

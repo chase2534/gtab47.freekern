@@ -1,0 +1,1 @@
+cmd_drivers/staging/android/ion/pxa/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o drivers/staging/android/ion/pxa/built-in.o drivers/staging/android/ion/pxa/pxa_ion.o 

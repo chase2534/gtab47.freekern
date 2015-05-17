@@ -1,0 +1,1 @@
+cmd_drivers/mfd/built-in.o :=  /mnt/640/ubu/gtabkernelsrc/android_prebuilt_toolchains-master/arm-cortex_a15-linux-gnueabihf-linaro_4.9.1/bin/arm-cortex_a15-linux-gnueabihf-ld -EL    -r -o drivers/mfd/built-in.o drivers/mfd/88pm800.o drivers/mfd/88pm80x.o drivers/mfd/88pm805.o drivers/mfd/88pm8xx-dvc.o drivers/mfd/mfd-core.o drivers/mfd/sm5502-muic.o 
